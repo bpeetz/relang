@@ -46,18 +46,21 @@
           program = "${packages.pythonPkg}/bin/main";
         };
 
-        devShells.default = pkgs.mkShellNoCC {
+        devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             nil
             alejandra
             statix
             ltex-ls
-            black
 
             pythonAppEnv
+            black
+            ruff
             python310Packages.python-lsp-server
+            gnat
           ];
 
+          LD_LIBARY_PATH = "${pkgs.stdenv.cc.cc.lib}";
           shellHook = ''
             export PYTHONPATH="${pythonAppEnv}/bin/python"
           '';

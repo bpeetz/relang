@@ -1,16 +1,16 @@
 from prompt_toolkit import prompt
-from relang import Relang
+from parser import Parser
 
 
 def main():
     while True:
-        relang = Relang(prompt("Rechenausdruck: "))
+        parser = Parser(prompt("Rechenausdruck: "))
 
         try:
-            number = relang.parse_term()
-            print(f"Parsed number: {number}")
+            print(f"Parsed output: {parser._parse_signed_number()}")
         except ValueError as err:
-            print(f"parse failed: {err}")
+            raise err
+            # print(f"parse failed: {err}")
 
 
 main()
