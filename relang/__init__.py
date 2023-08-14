@@ -1,6 +1,7 @@
 from prompt_toolkit import prompt
 import relang
 
+
 class Relang:
     def __init__(self, text):
         self.ALL_POSSIBLE_DIGITS = list(map(str, [i for i in range(0, 10)]))
@@ -23,7 +24,9 @@ class Relang:
         if self.peek() in char_expected:
             return True
         else:
-            raise ValueError(f'Got {self.peek()}, but expected one of: {", ".join(char_expected)}')
+            raise ValueError(
+                f'Got {self.peek()}, but expected one of: {", ".join(char_expected)}'
+            )
 
     def remove_whitespace(self):
         while self.peek() == " ":
@@ -51,18 +54,16 @@ class Relang:
                 output += self.parse_operator()
         return output
 
+
 def main():
     while True:
-        relang = Relang(prompt('Rechenausdruck: '))
+        relang = Relang(prompt("Rechenausdruck: "))
 
         try:
             number = relang.parse_term()
             print(f"Parsed number: {number}")
         except ValueError as err:
             print(f"parse failed: {err}")
-
-
-
 
 
 main()

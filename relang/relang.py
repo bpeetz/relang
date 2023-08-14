@@ -1,5 +1,6 @@
 class Relang:
     cursor = 0
+
     def __init__(self, text):
         self.text = text
 
@@ -15,4 +16,6 @@ class Relang:
         if self.peek() in char_expected:
             return true
         else:
-            raise ValueError(f'Got {self.peek()}, but expected one of: {char_expected.join(" ")}')
+            raise ValueError(
+                f'Got {self.peek()}, but expected one of: {char_expected.join(" ")}'
+            )

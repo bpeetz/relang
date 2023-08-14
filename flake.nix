@@ -8,12 +8,17 @@
     mach-nix.url = "github:davhau/mach-nix";
   };
 
-  outputs = { self, nixpkgs, mach-nix, flake-utils, ... }:
-    let
-      pythonVersion = "python39";
-    in
-    flake-utils.lib.eachDefaultSystem (system:
-      let
+  outputs = {
+    self,
+    nixpkgs,
+    mach-nix,
+    flake-utils,
+    ...
+  }: let
+    pythonVersion = "python39";
+  in
+    flake-utils.lib.eachDefaultSystem (
+      system: let
         pkgs = nixpkgs.legacyPackages.${system};
         mach = mach-nix.lib.${system};
 
@@ -24,11 +29,10 @@
         };
         pythonAppImage = pkgs.dockerTools.buildLayeredImage {
           name = pythonApp.pname;
-          contents = [ pythonApp ];
-          config.Cmd = [ "${pythonApp}/bin/main" ];
+          contents = [pythonApp];
+          config.Cmd = ["${pythonApp}/bin/main"];
         };
-      in
-      rec
+      in rec
       {
         packages = {
           image = pythonAppImage;
@@ -43,7 +47,16 @@
         };
 
         devShells.default = pkgs.mkShellNoCC {
-          packages = [ pythonAppEnv ];
+          packages = with pkgs; [
+            nil
+            alejandra
+            statix
+            ltex-ls
+            black
+
+            pythonAppEnv
+            python310Packages.python-lsp-server
+          ];
 
           shellHook = ''
             export PYTHONPATH="${pythonAppEnv}/bin/python"
